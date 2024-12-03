@@ -1,0 +1,7 @@
+line-terminator = "lf"
+
+[entrypoint]
+type = "lib"
+
+[intralinks]
+strip-links = true

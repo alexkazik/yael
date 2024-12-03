@@ -1,0 +1,14 @@
+[package]
+name = "yael"
+version = "1.0.0"
+authors = ["ALeX Kazik <alex@kazik.de>"]
+edition = "2021"
+description = "Library for reading and writing numbers of a specific endianess"
+repository = "https://github.com/alexkazik/yael"
+license = "MIT"
+categories = ["no-std", "encoding"]
+keywords = ["no-std", "endian", "byteorder", "big-endian", "little-endian"]
+readme = "README.md"
+rust-version = "1.83"
+
+[dependencies]
