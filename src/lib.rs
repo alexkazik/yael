@@ -11,6 +11,10 @@
 //!
 //! The conversion is made explicit by calling `new`, `get` and `set`.
 //!
+//! Default is provided because 0 is identical for both byte orders.
+//!
+//! Debug is provided because it can be useful and is expected to not be fast.
+//!
 //! Operations which do not depend on the byte order can be performed on integers:
 //! eq, and, or, xor, not.
 //!
@@ -72,13 +76,14 @@
 //!
 //! (`+0 == -0` float: equal, bits: different; `nan == nan` float: different, bits: equal)
 
+use core::fmt::{Debug, Formatter};
 use core::ops::{BitAnd, BitAndAssign, BitOr, BitOrAssign, BitXor, BitXorAssign, Not};
 
 macro_rules! create_int {
     ($name:ident, $type:ident, $from:ident, $to:ident, $bytes:expr, $doc:literal) => {
         #[doc = $doc]
         #[allow(non_camel_case_types)]
-        #[derive(Clone, Copy, PartialEq, Eq)]
+        #[derive(Clone, Copy, Default, PartialEq, Eq)]
         #[repr(transparent)]
         pub struct $name($type);
         impl $name {
@@ -168,6 +173,12 @@ macro_rules! create_int {
             #[inline]
             fn not(self) -> Self::Output {
                 Self(!self.0)
+            }
+        }
+
+        impl Debug for $name {
+            fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
+                self.get().fmt(f)
             }
         }
     };
@@ -309,7 +320,7 @@ macro_rules! create_float {
     ($name:ident, $float_type:ident, $int_type:ident, $from:ident, $to:ident, $bytes:expr, $doc:literal) => {
         #[doc = $doc]
         #[allow(non_camel_case_types)]
-        #[derive(Clone, Copy)]
+        #[derive(Clone, Copy, Default)]
         #[repr(transparent)]
         pub struct $name($int_type);
         impl $name {
@@ -338,6 +349,12 @@ macro_rules! create_float {
             #[must_use]
             pub const fn from_be_bytes(bytes: [u8; $bytes]) -> $name {
                 $name($int_type::from_be_bytes(bytes).$to())
+            }
+        }
+
+        impl Debug for $name {
+            fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
+                self.get().fmt(f)
             }
         }
     };

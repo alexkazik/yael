@@ -13,6 +13,10 @@ The library is `no_std`, has no features and no dependencies.
 
 The conversion is made explicit by calling `new`, `get` and `set`.
 
+Default is provided because 0 is identical for both byte orders.
+
+Debug is provided because it can be useful and is expected to not be fast.
+
 Operations which do not depend on the byte order can be performed on integers:
 eq, and, or, xor, not.
 
